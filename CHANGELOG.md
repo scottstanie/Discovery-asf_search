@@ -10,7 +10,7 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 <!--
 ## Example template!!
 
-## [version](https://github.com/asfadmin/Discovery-PytestAutomation/compare/vOLD...vNEW)
+## [version](https://github.com/asfadmin/Discovery-asf_search/compare/vOLD...vNEW)
 
 ### Added:
 -
@@ -19,17 +19,26 @@ and uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 -
 
 ### Fixed:
-- 
+-
 
 ### Removed:
 -
 
 -->
 ------
-## [v12.1.0](https://github.com/asfadmin/Discovery-asf_search/compare/v12.0.7...v12.1.0)
+## [v12.2.0](https://github.com/asfadmin/Discovery-asf_search/compare/v12.1.1...v12.2.0)
 ### Added
 - Add `Stack` class, used to create stacks of `Pair` objects. This is a foundational class, which will be used by a near-future `SBASNetwork` class to automate the creation of connected, multi-annual seasonal SBAS stacks of interferograms.
     - For usage examples, see `examples/Stack.ipynb`
+
+------
+## [v12.1.1](https://github.com/asfadmin/Discovery-asf_search/compare/v12.1.0...v12.1.1)
+### Added
+- For Opera proudcts, add file size information to `jsonlite2` output
+
+------
+## [v12.1.0](https://github.com/asfadmin/Discovery-asf_search/compare/v12.0.7...v12.1.0)
+### Added
 - `OPERA_L3_DIST-ALERT-S1_V1` shortname/collections added
 - Add `NISAR_EA` shortname/collections to NISAR dataset (available to authorized users)
 
