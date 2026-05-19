@@ -32,26 +32,16 @@ def stack_results():
         return pickle.load(f) # nosec B301
     
 @pytest.fixture
-def opts():
-    return ASFSearchOptions(
-        **{
-            "start": "2020-01-01",
-            "end": "2025-10-02",
-            "season": (1, 176),
-        }
-    )
-    
-@pytest.fixture
-def sbas_network(stack_results, opts):
+def sbas_network(stack_results):
     return SBASNetwork.from_search_results(
         stack_results,
+        season=(1, 176),
         perpendicular_baseline=100, 
         inseason_temporal_baseline=24,
         bridge_target_date='3-1',
-        bridge_year_threshold=2,
-        opts=opts)
+        bridge_year_threshold=2)
     
-def test_sbas_network_from_ref_scene(mocker, reference, stack_results, opts):
+def test_sbas_network_from_ref_scene(mocker, reference, stack_results):
     """
     Create an SBASNetwork from a geographic reference scene
     """
@@ -63,14 +53,14 @@ def test_sbas_network_from_ref_scene(mocker, reference, stack_results, opts):
 
     # Create an SBASNetwork and confrm expected size of its full_stack and subset_stack
     sbas = SBASNetwork(
-        geo_reference = reference,
+        reference,
+        start_date="2020-01-01",
+        end_date="2025-10-02",
+        season=(1, 176),
         perpendicular_baseline=100, 
         inseason_temporal_baseline=24,
         bridge_target_date='3-1',
-        bridge_year_threshold=2,
-        opts=opts)
-    
-    mock_stack.assert_called_once_with(opts=opts)
+        bridge_year_threshold=2)
 
     assert len(sbas.full_stack) == 1730
     assert len(sbas.subset_stack) == 176
@@ -86,33 +76,33 @@ def test_sbasnetwork_from_search_results(sbas_network):
     assert len(sbas_network.subset_stack) == 176
     assert len(max(sbas_network.connected_substacks, key=lambda s: len(s))) == 161
 
-def test_disallow_missing_state_vectors(stack_results, opts):
+def test_disallow_missing_state_vectors(stack_results):
     """
     Test the optional allow_missing_state_vectors argument set to False (default). 
     """
     stack_results[2].baseline["stateVectors"]["positions"]["prePositionTime"] = None
     missing_state_vectors_not_allowed_sbas = SBASNetwork.from_search_results(
         stack_results,
+        season=(1, 176),
         perpendicular_baseline=100, 
         inseason_temporal_baseline=24,
         bridge_target_date='3-1',
-        bridge_year_threshold=2,
-        opts=opts)
+        bridge_year_threshold=2)
     assert len(missing_state_vectors_not_allowed_sbas.full_stack) == 1698
     assert len([p for p in missing_state_vectors_not_allowed_sbas.full_stack if p.perpendicular_baseline is None]) == 0
 
-def test_disallow_missing_state_vectors(stack_results, opts):
+def test_disallow_missing_state_vectors(stack_results):
     """
     Test the optional allow_missing_state_vectors argument set to True. 
     """
     stack_results[2].baseline["stateVectors"]["positions"]["prePositionTime"] = None
     missing_state_vectors_allowed_sbas = SBASNetwork.from_search_results(
         stack_results,
+        season=(1, 176),
         perpendicular_baseline=100, 
         inseason_temporal_baseline=24,
         bridge_target_date='3-1',
         bridge_year_threshold=2,
-        opts=opts,
         allow_missing_state_vectors=True)
     assert len(missing_state_vectors_allowed_sbas.full_stack) == 1730
     assert len([p for p in missing_state_vectors_allowed_sbas.full_stack if p.perpendicular_baseline is None]) == 32
