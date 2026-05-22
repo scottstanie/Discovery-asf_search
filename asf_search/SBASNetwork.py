@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 import importlib.util
 import numpy as np
-import pandas as pd
 from typing import Optional, List, Dict, Tuple, Union
 
 from .ASFProduct import ASFProduct
